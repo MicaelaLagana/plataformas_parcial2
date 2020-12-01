@@ -2,10 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Model.Entities;
+
 
 namespace Api.Data
 {
-    class ParcialDBContext : DbContext
+    public class ParcialDBContext : DbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -1,4 +1,4 @@
-﻿@page "/AddUsuario/{id:int}"
+﻿@page "/usuario/editar/{id:int}"
 
 @using BlazorApp1.Data
 @using Model.Entities
@@ -47,7 +47,7 @@
     {
         if (Id > 0)
         {
-            Usuario = await service.Get(Id);
+            Usuario = await service.GetById(Id);
         }
         else
         {

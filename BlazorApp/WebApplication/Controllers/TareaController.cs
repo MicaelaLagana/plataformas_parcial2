@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model.Entities;
-using WebApplication.Data;
+using Api.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication.Controllers
@@ -14,9 +14,9 @@ namespace WebApplication.Controllers
     [ApiController]
     public class TareaController : ControllerBase
     {
-        private readonly TareasDbContext _context;
+        private readonly ParcialDBContext _context;
 
-        public TareaController(TareasDbContext context)
+        public TareaController(ParcialDBContext context)
         {
             _context = context;
         }
@@ -25,7 +25,7 @@ namespace WebApplication.Controllers
 
         public List<Tarea> GetAllTareas()
         {
-            return _context.Tarea.ToList();
+            return _context.Tareas.ToList();
         }
 
 
@@ -33,14 +33,14 @@ namespace WebApplication.Controllers
 
         public Tarea GetTarea(int id)
         {
-            Tarea tarea = _context.Tarea.Where(i => i.Id == id).SingleOrDefault();
+            Tarea tarea = _context.Tareas.Where(i => i.Id == id).SingleOrDefault();
             return tarea;
         }
 
         [HttpPut]
         public Tarea EditTarea(Tarea value)
         {
-            Tarea tareaeditar = _context.Tarea.Find(value.Id);
+            Tarea tareaeditar = _context.Tareas.Find(value.Id);
             tareaeditar.Titulo = value.Titulo;
             tareaeditar.Vencimiento = value.Vencimiento;
             tareaeditar.Estimacion = value.Estimacion;
@@ -53,7 +53,7 @@ namespace WebApplication.Controllers
         [HttpPost]
         public Tarea CreateTarea(Tarea value)
         {
-            _context.Tarea.Add(value);
+            _context.Tareas.Add(value);
             _context.SaveChanges();
             return value;
         }
@@ -62,8 +62,8 @@ namespace WebApplication.Controllers
         [HttpDelete("{id}")]
         public Tarea DeleteTarea(int id)
         {
-            Tarea tareaborrar = _context.Tarea.Find(id);
-            _context.Tarea.Remove(tareaborrar);
+            Tarea tareaborrar = _context.Tareas.Find(id);
+            _context.Tareas.Remove(tareaborrar);
             _context.SaveChanges();
             return tareaborrar;
         }

@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BlazorApp1.Pages;
+using Model.Entities;
+using Refit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,54 +10,36 @@ namespace BlazorApp1.Data
 {
     public class TareaService
     {
-        public Tarea[] GetTareas()
-
+        public Task<List<Tarea>> GetAll()
         {
-            var bd = new TareaDbContext();
-
-            var list = bd.Tarea.ToArray();
-
-            return list;
+            var remoteService = RestService.For<IRemoteService>("https://localhost:44353/api");
+            return remoteService.GetAllTarea();
+        }
+        public async Task<Tarea> GetById(int id)
+        {
+            var remoteService = RestService.For<IRemoteService>("https://localhost:44353/api");
+            return await remoteService.GetTareaById(id);
         }
 
-
-
-
-        private TareaDbContext context;
-
-        public TareaService(TareaDbContext _context)
+        public async Task<Tarea> Delete(int id)
         {
-            context = _context;
+            var remoteService = RestService.For<IRemoteService>("https://localhost:44353/api");
+            return await remoteService.DeleteTarea(id);
         }
 
-        public async Task<Tarea> GetTask(int id)
+        public async Task<Tarea> Save(Tarea tarea)
         {
-            return await context.Tarea.Where(i => i.Id == id).SingleAsync();
-        }
+            var remoteService = RestService.For<IRemoteService>("https://localhost:44353/api");
 
-        public async Task<List<Tarea>> GetAllTasks()
-        {
-            return await context.Tarea.ToListAsync();
-        }
-
-        public async Task<Tarea> SaveTask(Tarea value)
-        {
-            if (value.Id == 0)
+            if (tarea.Id == 0)
             {
-                await context.Tarea.AddAsync(value);
+                return await remoteService.CrearTarea(tarea);
             }
             else
             {
-                context.Tarea.Update(value);
+                return await remoteService.UpdateTarea(tarea, tarea.Id);
             }
-            await context.SaveChangesAsync();
-            return value;
         }
 
-        public async Task<bool> RemoveTask(int id)
-        {
-            var entidad = await context.Tarea.Where(i => i.Id == id).SingleAsync();
-            context.Tarea.Remove(entidad);
-            await context.SaveChangesAsync();
-            return true;
-        }
+    }
+}

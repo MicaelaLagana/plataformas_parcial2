@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using WebApplication.Data;
+using Api.Data;
 using Model.Entities;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -10,61 +10,60 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication.Controllers
 {
-    public class RecursoController
-    {
-        [Route("api/[controller]")]
-    [ApiController]
-    public class RecursoController : ControllerBase
-    {
-        private readonly TareasDbContext _context;
+   [Route("api/[controller]")]
+   [ApiController]
+   public class RecursoController : ControllerBase
+   {
+      private readonly ParcialDBContext _context;
 
-        public RecursoController(TareasDbContext context)
-        {
-            _context = context;
-        }
+      public RecursoController(ParcialDBContext context)
+      {
+        _context = context;
+      }
 
-        [HttpGet]
+      [HttpGet]
 
-        public List<Recurso> GetAll()
-        {
-            return _context.Recurso.ToList();
-        }
+      public List<Recurso> GetAll()
+      {
+        return _context.Recursos.ToList();
+      }
 
-        [HttpGet("{id}")]
+      [HttpGet("{id}")]
 
-        public Recurso GetRecurso(int id)
-        {
-            Recurso recurso = _context.Recurso.Where(i => i.Id == id).SingleOrDefault();
-            return recurso;
-        }
+      public Recurso GetRecurso(int id)
+      {
+        Recurso recurso = _context.Recursos.Where(i => i.Id == id).SingleOrDefault();
+        return recurso;
+      }
 
-        [HttpPut]
-        public Recurso EditRecurso(Recurso value)
-        {
-            Recurso recursoeditar = _context.Recurso.Find(value.Id);
-            recursoeditar.Nombre = value.Nombre;
-            recursoeditar.UsuarioId = value.UsuarioId;
-            _context.SaveChanges();
-            return value;
-        }
+      [HttpPut]
+      public Recurso EditRecurso(Recurso value)
+      {
+        Recurso recursoedit = _context.Recursos.Find(value.Id);
+        recursoedit.Nombre = value.Nombre;
+        recursoedit.UsuarioId = value.UsuarioId;
+        _context.SaveChanges();
+        return value;
+      }
 
-        [HttpPost]
-        public Recurso CreateTarea(Recurso value)
-        {
-            _context.Recurso.Add(value);
-            _context.SaveChanges();
-            return value;
-        }
+      [HttpPost]
+      public Recurso CreateTarea(Recurso value)
+      {
+        _context.Recursos.Add(value);
+        _context.SaveChanges();
+        return value;
+      }
 
 
-        [HttpDelete("{id}")]
-        public Recurso DeleteRecurso(int id)
-        {
-            Recurso recursoborrar = _context.Recurso.Find(id);
-            _context.Recurso.Remove(recursoborrar);
-            _context.SaveChanges();
-            return recursoborrar;
-        }
-    }
-    }
+      [HttpDelete("{id}")]
+      public Recurso DeleteRecurso(int id)
+      {
+        Recurso recursoDelete= _context.Recursos.Find(id);
+        _context.Recursos.Remove(recursoDelete);
+        _context.SaveChanges();
+        return recursoDelete;
+      }
+
+   }
 }
+

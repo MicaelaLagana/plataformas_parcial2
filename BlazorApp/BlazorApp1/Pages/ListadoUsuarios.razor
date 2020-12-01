@@ -1,8 +1,9 @@
-﻿@page "/usuarios"
+﻿@page "/usuarios/listado"
 
 @using BlazorApp1.Data
 @using Model.Entities
 @inject RecursoService  ServicioRecurso
+@inject UsuarioService  ServicioUsuario
 @inject NavigationManager navigation
 @inject IJSRuntime JsRuntime
 
@@ -40,7 +41,7 @@ else
 }
 
 @code {
-       private List<Usuario> usuarios;
+    private List<Usuario> usuarios;
 
     protected override async Task OnInitializedAsync()
     {
@@ -57,7 +58,7 @@ else
         bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "¿Seguro quiere eliminar el usuario?");
         if (confirmed)
         {
-            await ServicioUsuario.Remove(id);
+            await ServicioUsuario.Delete(id);
             usuarios = await ServicioUsuario.GetAll();
         }
     }

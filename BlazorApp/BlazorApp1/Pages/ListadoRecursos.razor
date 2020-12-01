@@ -1,0 +1,64 @@
+﻿@page "/recursos/listado"
+
+@using BlazorApp1.Data
+@using Model.Entities
+@inject RecursoService  ServicioRecurso
+@inject NavigationManager navigation
+@inject IJSRuntime JsRuntime
+
+<h3>Recursos</h3>
+
+<button type="button" class="btn btn-primary" @onclick="()=>EditarRecurso(0)">Nuevo</button>
+
+@if (recursos == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var f in recursos)
+            {
+                <tr>
+                    <td>@f.Id</td>
+                    <td>@f.Nombre</td>
+
+                    <td><button type="button" class="btn btn-success" @onclick="()=>EditarRecurso(f.Id)">Editar</button> <button type="button" class="btn btn-danger" @onclick="()=>BorrarRecurso(f.Id)">Borrar</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Recurso> recursos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        recursos = await ServicioRecurso.GetAll();
+    }
+
+    protected void EditarRecurso(int id)
+    {
+        navigation.NavigateTo("recurso/editar/" + id);
+    }
+
+    protected async Task BorrarRecurso(int id)
+    {
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "¿Seguro quiere eliminar este recurso?");
+        if (confirmed)
+        {
+            await ServicioRecurso.Delete(id);
+            recursos = await ServicioRecurso.GetAll();
+        }
+    }
+}

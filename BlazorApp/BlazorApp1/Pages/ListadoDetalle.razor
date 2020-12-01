@@ -1,0 +1,83 @@
+﻿@page "/detalle/listado/{id:int}"
+@using BlazorApp1.Data;
+@using Model.Entities;
+@inject DetalleService DetalleService
+@inject TareaService TareaService
+@inject NavigationManager navigation
+@inject IJSRuntime JsRuntime
+
+@if (detalles == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <button class="btn btn-primary mb-3" @onclick="()=>Volver()">Volver</button>
+    <h3>Detalles de @tarea.Titulo</h3>
+    <button class="btn btn-primary" @onclick="()=>EditarDetalle(0)">Nuevo</button>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Tiempo</th>
+                <th>Recursos</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var d in detalles)
+            {
+                <tr>
+                    <td>@d.Fecha</td>
+                    <td>@d.Tiempo</td>
+                    @if (d.Recurso != null)
+                    {
+                        <td>@d.Recurso.Nombre</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+
+                    <td><button class="btn btn-primary" @onclick="()=>EditarDetalle(d.Id)">Editar</button></td>
+                    <td><button class="btn btn-danger" @onclick="()=>BorrarDetalle(d.Id)">Borrar</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private List<Model.Entities.Detalle> detalles;
+    private Tarea tarea;
+
+    protected override async Task OnInitializedAsync()
+    {
+        tarea = await TareaService.GetById(Id);
+        detalles = await DetalleService.GetAllByTaskId(Id);
+    }
+
+    protected void EditarDetalle(int idDetalle)
+    {
+        navigation.NavigateTo("detalle/editar/" + Id + "/" + idDetalle);
+    }
+
+    protected async Task BorrarDetalle(int id)
+    {
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "¿Seguro que quiere eliminar el detalle?");
+        if (confirmed)
+        {
+            await DetalleService.Delete(id);
+            detalles = await DetalleService.GetAllByTaskId(Id);
+        }
+    }
+
+    protected void Volver()
+    {
+        navigation.NavigateTo("tarea/listado");
+    }
+}

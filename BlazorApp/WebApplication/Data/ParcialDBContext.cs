@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Api.Data
 {
-    class ParcialDBContext : DbContext
+    public class ParcialDBContext : DbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

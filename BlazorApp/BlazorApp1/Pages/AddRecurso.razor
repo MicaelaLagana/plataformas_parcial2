@@ -1,4 +1,4 @@
-﻿@page "/AddRecurso/{id:int}"
+﻿@page "/recurso/editar/{id:int}"
 
 @using BlazorApp1.Data
 @using Model.Entities
@@ -7,14 +7,14 @@
 @inject NavigationManager navigation
 
 
-@if (Usuarios == null)
+@if (usuarios == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
 
-    <EditForm Model="@Recurso" OnValidSubmit="@Guardar">
+    <EditForm Model="@Modelo" OnValidSubmit="@Guardar">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
@@ -23,7 +23,7 @@ else
                 Nombre
             </label>
             <div class="col-sm-10">
-                <InputText @bind-Value="Recurso.Nombre" />
+                <InputText @bind-Value="Modelo.Nombre" />
             </div>
         </div>
 
@@ -31,9 +31,9 @@ else
             <label for="lastName" class="col-sm-2 col-form-label">
                 UsuarioId
             </label>
-            <InputSelect @bind-Value="Usuario">
+            <InputSelect @bind-Value="usuarios">
                 <option value="0">Elija un Usuario</option>
-                @foreach (var item in Usuarios)
+                @foreach (var item in usuarios)
                     {
                     <option value="@item.Id">@item.User</option>
                     }
@@ -48,34 +48,34 @@ else
     [Parameter]
     public int Id { get; set; }
 
-    public Recurso Recurso { get; set; } = new Recurso();
+    public Recurso Modelo { get; set; } = new Recurso();
 
-    public string Usuario { get; set; }
+    public string UsuarioId { get; set; }
 
-    private List<Usuario> Usuarios;
+    private List<Usuario> usuarios;
 
     protected override async Task OnInitializedAsync()
     {
         if (Id > 0)
         {
-            Recurso = await service.Get(Id);
-            Usuario = Recurso.UsuarioId.ToString();
+            Modelo = await service.GetById(Id);
+            UsuarioId = Modelo.UsuarioId.ToString();
         }
         else
         {
-            Recurso = new Recurso();
+            Modelo = new Recurso();
         }
-        Usuarios = await service.GetUsuarios();
 
+        usuarios = await serviceusuario.GetAll();
     }
 
 
     private async void Guardar()
     {
-        Recurso.UsuarioId = int.Parse(Usuario);
-        await service.Save(Recurso);
-        navigation.NavigateTo("/Recursos");
+        Modelo.UsuarioId = int.Parse(UsuarioId);
+        await service.Save(Modelo);
+        navigation.NavigateTo("recurso/listado");
     }
-
+}
 
 }

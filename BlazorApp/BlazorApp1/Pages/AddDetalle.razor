@@ -1,4 +1,4 @@
-﻿@page "/AddDetalle/{id:int}/TareaId/{TareaId:int}"
+﻿@page "/Detalle/editar/{id:int}/TareaId/{TareaId:int}"
 
 @using Model.Entities
 @using BlazorApp1.Data
@@ -90,7 +90,7 @@ else
         Tarea = TareaId.ToString();
         if (Id > 0)
         {
-            Detalle = await service.Get(Id);
+            Detalle = await service.GetById(Id);
             Recurso = Detalle.RecursoId.ToString();
 
         }

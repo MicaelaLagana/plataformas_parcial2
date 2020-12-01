@@ -100,7 +100,7 @@ else
     {
         if (Id > 0)
         {
-            Tarea = await service.Get(Id);
+            Tarea = await service.GetById(Id);
             ResponsableId = Tarea.ResponsableId.ToString();
         }
         else

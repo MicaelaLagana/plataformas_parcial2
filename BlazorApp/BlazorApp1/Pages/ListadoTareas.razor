@@ -1,8 +1,9 @@
-﻿@page "/tareas"
+﻿@page "/tareas/listado"
 
 @using BlazorApp1.Data
 @using Model.Entities
 @inject RecursoService  ServicioRecurso
+@inject TareaService ServicioTarea 
 @inject NavigationManager navigation
 @inject IJSRuntime JsRuntime
 
@@ -68,7 +69,7 @@ else
         bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "¿seguro quiere eliminar esta tarea?");
         if (confirmed)
         {
-            await ServicioTarea.Remove(id);
+            await ServicioTarea.Delete(id);
             tareas = await ServicioTarea.GetAll();
         }
     }

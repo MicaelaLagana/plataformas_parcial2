@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebApplication.Data;
+using Api.Data;
 using Model.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,9 +14,9 @@ namespace WebApplication.Controllers
     [ApiController]
     public class UsuarioController : ControllerBase
     {
-        private readonly TareasDbContext _context;
+        private readonly ParcialDBContext _context;
 
-        public UsuarioController(TareasDbContext context)
+        public UsuarioController(ParcialDBContext context)
         {
             _context = context;
         }
@@ -40,9 +40,9 @@ namespace WebApplication.Controllers
        [HttpPut]
         public Usuario EditUsuario(Usuario value)
        {
-           Usuario usuarioeditar = _context.Usuarios.Find(value.Id);
-           usuarioeditar.Clave = value.Clave;
-           usuarioeditar.User = value.User;
+           Usuario usuarioedit = _context.Usuarios.Find(value.Id);
+            usuarioedit.Clave = value.Clave;
+            usuarioedit.User = value.User;
            _context.SaveChanges();
            return value;
        }
@@ -59,10 +59,10 @@ namespace WebApplication.Controllers
         [HttpDelete("{id}")]
         public Usuario DeleteUsuario(int id)
         {
-            Usuario usuarioborrar = _context.Usuarios.Find(id);
-            _context.Usuarios.Remove(usuarioborrar);
+            Usuario usuarioDelete = _context.Usuarios.Find(id);
+            _context.Usuarios.Remove(usuarioDelete);
             _context.SaveChanges();
-            return usuarioborrar;
+            return usuarioDelete;
         }
     }
 }

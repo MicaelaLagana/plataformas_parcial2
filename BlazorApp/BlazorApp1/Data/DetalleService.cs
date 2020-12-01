@@ -1,85 +1,43 @@
-﻿using System;
+﻿using Model.Entities;
+using Refit;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace BlazorApp1.Data
 {
     public class DetalleService
     {
-
-        public Detalle[] GetDatalles()
+        public async Task<List<Detalle>> GetAllByTaskId(int id)
         {
-            var bd = new TareasDbContext();
-
-            var list = bd.Detalle.ToArray();
-
-            return list;
-
+            var remoteService = RestService.For<IRemoteService>("https://localhost:44353/api");
+            return await remoteService.GetAllByTaskId(id);
+        }
+        public async Task<Detalle> GetById(int id)
+        {
+            var remoteService = RestService.For<IRemoteService>("https://localhost:44353/api");
+            return await remoteService.GetDetalleById(id);
         }
 
-        private TareasDbContext context;
-
-        public DetalleService(TareasDbContext _context)
+        public async Task<Detalle> Delete(int id)
         {
-            context = _context;
+            var remoteService = RestService.For<IRemoteService>("https://localhost:44353/api");
+            return await remoteService.DeleteDetalle(id);
         }
 
-        public async Task<Detalle> Get(int id)
+        public async Task<Detalle> Save(Detalle recurso)
         {
-            return await context.Detalle.Where(i => i.Id == id).SingleAsync();
-        }
-
-        public async Task<List<Detalle>> GetAll()
-        {
-            return await context.Detalle.ToListAsync();
-        }
-
-        public async Task<Detalle> Save(Detalle value)
-        {
-            if (value.Id == 0)
+            var remoteService = RestService.For<IRemoteService>("https://localhost:44353/api");
+            if (recurso.Id == 0)
             {
-                await context.Detalle.AddAsync(value);
+                return await remoteService.CrearDetalle(recurso);
             }
             else
             {
-                context.Detalle.Update(value);
+                return await remoteService.UpdateDetalle(recurso, recurso.Id);
             }
-            await context.SaveChangesAsync();
-            return value;
         }
-
-        public async Task<bool> Remove(int id)
-        {
-            var entidad = await context.Detalle.Where(i => i.Id == id).SingleAsync();
-            context.Detalle.Remove(entidad);
-            await context.SaveChangesAsync();
-            return true;
-        }
-
-
-
-
-        /*
-        public Detalle [] GetDatallesAsync()
-        {
-            Detalle[] res = new Detalleo[1];
-            res[0] = new Usuario { int Id = 1, User = "U1", Clave = "C1" };
-            
-            return res;
-        }
-        */
-
-        public async Task<List<Recurso>> GetRecurso()
-        {
-            return await context.Recurso.ToListAsync();
-        }
-
-
-        public async Task<List<Tarea>> GetTarea()
-        {
-            return await context.Tarea.ToListAsync();
-        }
-
     }
 }

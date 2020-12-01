@@ -1,0 +1,125 @@
+﻿@page "/AddTarea/{id:int}"
+
+@using BlazorApp1.Data
+@using Model.Entities
+@inject TareaService service
+@inject NavigationManager navigation
+@inject RecursoService servicerecurso
+
+@if (Recursos == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="@Tarea" OnValidSubmit="@Guardar">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group row">
+            <label for="lastName" class="col-sm-2 col-form-label">
+                ID Tarea
+            </label>
+            <div class="col-sm-10">
+                @Tarea.Id
+            </div>
+        </div>
+
+
+        <div class="form-group row">
+            <label for="lastName" class="col-sm-2 col-form-label">
+                Titulo
+            </label>
+            <div class="col-sm-10">
+                <InputText @bind-Value="Tarea.Titulo" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="lastName" class="col-sm-2 col-form-label">
+                Fecha Vencimiento
+            </label>
+            <div class="col-sm-10">
+                <InputDate @bind-Value="Tarea.Vencimiento" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="lastName" class="col-sm-2 col-form-label">
+                Fecha Estimacion
+            </label>
+            <div class="col-sm-10">
+                <InputDate @bind-Value="Tarea.Estimacion" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="lastName" class="col-sm-2 col-form-label">
+                Responsable ID
+            </label>
+            <div class="col-sm-10">
+                <InputSelect @bind-Value="ResponsableId">
+                    <option value="0">Responsable</option>
+                    @foreach (var item in Recursos)
+                        {
+                        <option value="@item.Id">@item.Nombre</option>
+                        }
+                </InputSelect>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="lastName" class="col-sm-2 col-form-label">
+                Estado Tarea
+            </label>
+            <div class="col-sm-10">
+                <InputCheckbox @bind-Value="Tarea.Estado" />
+            </div>
+        </div>
+
+
+
+
+        <button type="submit">Guardar</button>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    public Tarea Tarea { get; set; } = new Tarea();
+
+    public string ResponsableId { get; set; }
+
+    public List<Recurso> Recursos { get; set; }
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id > 0)
+        {
+            Tarea = await service.Get(Id);
+            ResponsableId = Tarea.ResponsableId.ToString();
+        }
+        else
+        {
+            Tarea = new Tarea();
+        }
+        Recursos = await servicerecurso.GetAll();
+    }
+
+
+    private async void Guardar()
+    {
+        if (int.Parse(ResponsableId) > -1)
+        {
+            Tarea.ResponsableId = int.Parse(ResponsableId);
+        }
+        await service.Save(Tarea);
+        navigation.NavigateTo("/Tareas");
+    }
+
+
+}

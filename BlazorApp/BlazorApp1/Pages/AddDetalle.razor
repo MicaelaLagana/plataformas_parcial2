@@ -1,0 +1,115 @@
+﻿@page "/AddDetalle/{id:int}/TareaId/{TareaId:int}"
+
+@using Model.Entities
+@using BlazorApp1.Data
+@inject DetalleService service
+@inject NavigationManager navigation
+@inject RecursoService servicerecurso
+@inject TareaService servicetarea
+
+@if (Recursos == null && Tareas == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="@Detalle" OnValidSubmit="@Guardar">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group row">
+            <label for="lastName" class="col-sm-2 col-form-label">
+                Fecha
+            </label>
+            <div class="col-sm-10">
+                <InputDate @bind-Value="Detalle.Fecha" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="lastName" class="col-sm-2 col-form-label">
+                Fecha
+            </label>
+            <div class="col-sm-10">
+                <InputDate @bind-Value="Detalle.Tiempo" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="lastName" class="col-sm-2 col-form-label">
+                RecursoId
+            </label>
+            <InputSelect @bind-Value="Recurso">
+                <option value="0">Elija un Recurso</option>
+                @foreach (var item in Recursos)
+                    {
+                    <option value="@item.Id">@item.Nombre</option>
+                    }
+            </InputSelect>
+        </div>
+        @if (Id!=0) {
+        <div class="form-group row">
+            <label for="lastName" class="col-sm-2 col-form-label">
+                TareaId
+            </label>
+            <InputSelect @bind-Value="Tarea">
+                <option value="0">Elija una Tarea</option>
+                @foreach (var item in Tareas)
+                {
+                    <option value="@item.Id">@item.Titulo</option>
+                }
+            </InputSelect>
+        </div>
+        }
+
+
+        <button type="submit">Guardar</button>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    [Parameter]
+    public int TareaId { get; set; }
+
+    public Detalle Detalle { get; set; } = new Detalle();
+
+    public string Recurso { get; set; }
+
+    public string Tarea { get; set; }
+
+
+    private List<Recurso> Recursos;
+
+    private List<Tarea> Tareas;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Tarea = TareaId.ToString();
+        if (Id > 0)
+        {
+            Detalle = await service.Get(Id);
+            Recurso = Detalle.RecursoId.ToString();
+
+        }
+        else
+        {
+            Detalle = new Detalle();
+            Detalle.TareaId = TareaId;
+        }
+        Recursos = await servicerecurso.GetAll();
+        Tareas = await servicetarea.GetAll();
+    }
+
+
+    private async void Guardar()
+    {
+        Detalle.RecursoId = int.Parse(Recurso);
+        Detalle.TareaId = int.Parse(Tarea);
+        await service.Save(Detalle);
+        navigation.NavigateTo("/Detalles/"+TareaId);
+    }
+
+}

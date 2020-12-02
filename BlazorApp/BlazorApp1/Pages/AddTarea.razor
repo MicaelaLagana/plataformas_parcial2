@@ -118,7 +118,7 @@ else
             Tarea.ResponsableId = int.Parse(ResponsableId);
         }
         await service.Save(Tarea);
-        navigation.NavigateTo("/Tareas");
+        navigation.NavigateTo("/tareas/listado");
     }
 
 

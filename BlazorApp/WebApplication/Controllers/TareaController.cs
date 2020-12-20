@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model.Entities;
-using Api.Data;
+using WabApplication.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("WebApplication/[controller]")]
     [ApiController]
     public class TareaController : ControllerBase
     {

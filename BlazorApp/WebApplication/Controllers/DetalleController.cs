@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Api.Data;
+using WabApplication.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +9,7 @@ using Model.Entities;
 
 namespace WebApplication.Controllers
 {
-     [Route("api/[controller]")]
+     [Route("WebApplication/[controller]")]
     [ApiController]
     public class DetalleController : ControllerBase
     {
@@ -64,8 +64,6 @@ namespace WebApplication.Controllers
             _context.SaveChanges();
             return detaildelete;
         }
-
-
     }
 }
 

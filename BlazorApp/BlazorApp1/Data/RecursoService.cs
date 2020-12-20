@@ -11,25 +11,25 @@ namespace BlazorApp1.Data
     {
         public async Task<List<Recurso>> GetAll()
         {
-            var remoteService = RestService.For<IRemoteService>("https://localhost:44353/api");
+            var remoteService = RestService.For<IRemoteService>("https://localhost:44303/WebApplication");
             return await remoteService.GetAllRecurso();
         }
 
         public async Task<Recurso> GetById(int id)
         {
-            var remoteService = RestService.For<IRemoteService>("https://localhost:44353/api");
+            var remoteService = RestService.For<IRemoteService>("https://localhost:44303/WebApplication");
             return await remoteService.GetRecursoById(id);
         }
 
         public async Task<Recurso> Delete(int id)
         {
-            var remoteService = RestService.For<IRemoteService>("https://localhost:44353/api");
+            var remoteService = RestService.For<IRemoteService>("https://localhost:44303/WebApplication");
             return await remoteService.DeleteRecurso(id);
         }
 
         public async Task<Recurso> Save(Recurso recurso)
         {
-            var remoteService = RestService.For<IRemoteService>("https://localhost:44353/api");
+            var remoteService = RestService.For<IRemoteService>("https://localhost:44303/WebApplication");
             if (recurso.Id == 0)
             {
                 return await remoteService.CrearUsuario(recurso);

@@ -63,7 +63,7 @@ else
 
     protected void EditarDetalle(int idDetalle)
     {
-        navigation.NavigateTo("detalle/editar/" + Id + "/" + idDetalle);
+        navigation.NavigateTo("detalle/editar/" + Id + "/tareaId/" + idDetalle);
     }
 
     protected async Task BorrarDetalle(int id)
@@ -78,6 +78,6 @@ else
 
     protected void Volver()
     {
-        navigation.NavigateTo("tareas/listado");
+        navigation.NavigateTo("tarea/listado");
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Api.Data;
+using WabApplication.Data;
 using Model.Entities;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication.Controllers
 {
-   [Route("api/[controller]")]
+   [Route("WebApplication/[controller]")]
    [ApiController]
    public class RecursoController : ControllerBase
    {

@@ -1,4 +1,4 @@
-﻿@page "/AddTarea/{id:int}"
+﻿@page "/tarea/editar/{id:int}"
 
 @using BlazorApp1.Data
 @using Model.Entities
@@ -118,7 +118,7 @@ else
             Tarea.ResponsableId = int.Parse(ResponsableId);
         }
         await service.Save(Tarea);
-        navigation.NavigateTo("/tareas/listado");
+        navigation.NavigateTo("/tarea/listado");
     }
 
 

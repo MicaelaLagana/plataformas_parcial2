@@ -1,4 +1,4 @@
-﻿@page "/tareas/listado"
+﻿@page "/tarea/listado"
 
 @using BlazorApp1.Data
 @using Model.Entities
@@ -61,7 +61,7 @@ else
 
     protected void Editar(int id)
     {
-        navigation.NavigateTo("/AddTarea/" + id);
+        navigation.NavigateTo("/tarea/editar/" + id);
     }
 
     protected async Task Borrar(int id)
@@ -76,6 +76,6 @@ else
 
     protected void VerDetalleTarea(int id)
     {
-        navigation.NavigateTo("/Detalle/" + id);
+        navigation.NavigateTo("/detalle/listado" + id);
     }
 }

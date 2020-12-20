@@ -1,4 +1,4 @@
-﻿@page "/usuarios/listado"
+﻿@page "/usuario/listado"
 
 @using BlazorApp1.Data
 @using Model.Entities
@@ -50,7 +50,7 @@ else
 
     protected void Editar(int id)
     {
-        navigation.NavigateTo("/usuarios/editar/" + id);
+        navigation.NavigateTo("/usuario/editar/" + id);
     }
 
     protected async Task Borrar(int id)
